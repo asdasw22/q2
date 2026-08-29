@@ -2,6 +2,32 @@
 
 struct TemplatesView: View {
     @EnvironmentObject private var store: SmartGradeStore
-    var body: some View { ScrollView { VStack(spacing: 16) { GlassCard { VStack(alignment: .leading, spacing: 6) { Text("قوالب OMR القياسية").font(.title3.bold()); Text("نفس قوالب المشروع الأصلي: 20 سؤال و50 سؤال، شبكة رقم طالب 9 خانات، علامات تسجيل زوايا، وعتبات معايرة.").font(.caption).foregroundStyle(.secondary) } }; ForEach(store.templates) { t in GlassCard { VStack(alignment: .leading, spacing: 10) { Text(t.name).font(.headline); Text("Revision \(t.definition.revision) • \(t.definition.questionsCount) Questions • A4 Ratio \(t.definition.pageAspectRatio, specifier: "%.3f")").font(.caption).foregroundStyle(.secondary); HStack { Text("Student ID: \(t.definition.studentID.columns)x\(t.definition.studentID.rows)"); Spacer(); Text("Threshold \(t.definition.calibration.fillRatioThreshold, specifier: "%.2f")") }.font(.caption.bold()) } }.padding(.horizontal) } }.padding(.vertical) }.pageBackground() }
-}
 
+    var body: some View {
+        NavigationStack {
+            List {
+                if store.templates.isEmpty {
+                    EmptyStateView(title: "No templates", message: "Default OMR templates will appear here.", systemImage: "square.grid.3x3")
+                } else {
+                    Section {
+                        ForEach(store.templates) { template in
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(template.name).font(.headline)
+                                Text("Revision \(template.definition.revision) · \(template.definition.questionsCount) Questions · A4 Ratio \(template.definition.pageAspectRatio, specifier: "%.3f")")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text("Student ID: \(template.definition.studentID.columns)x\(template.definition.studentID.rows) · Threshold \(template.definition.calibration.fillRatioThreshold, specifier: "%.2f")")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    } footer: {
+                        Text("Standard templates from the original SmartGrade project.")
+                    }
+                }
+            }
+            .navigationTitle(store.isArabic ? "القوالب" : "Templates")
+        }
+    }
+}
