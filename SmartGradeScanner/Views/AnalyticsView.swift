@@ -1,4 +1,4 @@
-import SwiftUI
+﻿import SwiftUI
 
 struct AnalyticsView: View {
     @EnvironmentObject private var store: SmartGradeStore
