@@ -2,55 +2,32 @@ name: Build iOS IPA
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - master
 
 jobs:
   build-ios-ipa:
-    name: Build unsigned iOS IPA
+    name: Build IPA
     runs-on: macos-15
 
     env:
       PROJECT_PATH: SmartGradeScanner.xcodeproj
       SCHEME: SmartGradeScanner
-      CONFIGURATION: Release
       ARCHIVE_PATH: build/SmartGradeScanner.xcarchive
-      EXPORT_PATH: build/export
-      IPA_PAYLOAD_PATH: build/unsigned-ipa/Payload
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Show Xcode version
-        run: |
-          xcodebuild -version
-          xcode-select -p
-
-      - name: List project files
-        run: |
-          pwd
-          find . -maxdepth 3 -type f | sort
-
-      - name: Resolve Swift packages if any
-        run: |
-          xcodebuild \
-            -resolvePackageDependencies \
-            -project "$PROJECT_PATH" \
-            -scheme "$SCHEME"
-
-      - name: Build iOS archive without code signing
+      - name: Build Archive
         run: |
           set -euo pipefail
+
           rm -rf build
           mkdir -p build
 
           xcodebuild archive \
             -project "$PROJECT_PATH" \
             -scheme "$SCHEME" \
-            -configuration "$CONFIGURATION" \
+            -configuration Release \
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
             -archivePath "$ARCHIVE_PATH" \
@@ -59,40 +36,22 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             DEVELOPMENT_TEAM="" \
             SKIP_INSTALL=NO \
-            clean archive
+            SWIFT_OPTIMIZATION_LEVEL=-Onone \
+            COMPILER_INDEX_STORE_ENABLE=NO
 
-      - name: Create unsigned IPA from archive
+      - name: Create IPA
         run: |
           set -euo pipefail
+
           APP_PATH="$ARCHIVE_PATH/Products/Applications/SmartGradeScanner.app"
 
-          if [ ! -d "$APP_PATH" ]; then
-            echo "App bundle was not found at: $APP_PATH"
-            echo "Archive contents:"
-            find "$ARCHIVE_PATH" -maxdepth 5 -print
-            exit 1
-          fi
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
 
-          mkdir -p "$IPA_PAYLOAD_PATH"
-          cp -R "$APP_PATH" "$IPA_PAYLOAD_PATH/"
-          cd build/unsigned-ipa
-          zip -qry ../SmartGradeScanner-unsigned.ipa Payload
-          cd ../..
+          zip -qry SmartGradeScanner.ipa Payload
 
-          ls -lah build
-
-      - name: Upload IPA artifact
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: SmartGradeScanner-unsigned-ipa
-          path: build/SmartGradeScanner-unsigned.ipa
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Upload Xcode archive artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SmartGradeScanner-xcarchive
-          path: build/SmartGradeScanner.xcarchive
-          if-no-files-found: error
-          retention-days: 14
+          name: SmartGradeScanner-IPA
+          path: SmartGradeScanner.ipa
