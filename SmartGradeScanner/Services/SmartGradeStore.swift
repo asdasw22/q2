@@ -55,6 +55,15 @@ final class SmartGradeStore: ObservableObject {
     func saveResult(_ result: ExamResult) { upsert(result, array: &results, prepend: true) }
     func deleteResult(_ id: String) { results.removeAll { $0.id == id } }
     func results(for exam: Exam) -> [ExamResult] { results.filter { $0.examId == exam.id } }
+    func resultsForStudent(_ student: Student) -> [ExamResult] {
+        results.filter { result in
+            result.studentId == student.id
+            || result.studentID == student.studentID
+            || result.studentID.hasSuffix(student.studentID)
+            || student.studentID.hasSuffix(result.studentID)
+        }
+    }
+    func exam(for id: String) -> Exam? { exams.first { $0.id == id } }
     func findStudent(studentID: String) -> Student? { students.first { $0.studentID == studentID || $0.studentID.hasSuffix(studentID) || studentID.hasSuffix($0.studentID) } }
     func classroomName(for id: String) -> String? { classrooms.first { $0.id == id }?.name }
 

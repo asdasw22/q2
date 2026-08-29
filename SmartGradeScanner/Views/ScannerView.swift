@@ -41,8 +41,10 @@ struct ScannerView: View {
                     Spacer()
                     if processing { processingBadge }
                     if let scannerMessage { messageBadge(scannerMessage) }
-                    controls
                 }
+            }
+            .safeAreaInset(edge: .bottom) {
+                controls
             }
             .navigationTitle(store.isArabic ? "المسح" : "Scan")
             .navigationBarTitleDisplayMode(.inline)
@@ -62,7 +64,6 @@ struct ScannerView: View {
             } onCancel: {
                 showDocumentScanner = false
             }
-            .ignoresSafeArea()
         }
         .fullScreenCover(isPresented: $showSystemCamera) {
             SystemCameraView { image in
@@ -73,7 +74,6 @@ struct ScannerView: View {
             } onCancel: {
                 showSystemCamera = false
             }
-            .ignoresSafeArea()
         }
         .sheet(item: Binding(get: { review.map { ReviewBox(result: $0) } }, set: { if $0 == nil { review = nil } })) { box in
             if let exam = activeExam {
@@ -199,8 +199,11 @@ struct ScannerView: View {
             }
             .disabled(selectedImage == nil || processing)
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, 24)
-        .padding(.bottom, 22)
+        .padding(.top, 14)
+        .padding(.bottom, 12)
+        .background(.ultraThinMaterial)
     }
 
     private var processingBadge: some View {
