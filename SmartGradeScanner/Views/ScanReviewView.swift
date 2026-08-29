@@ -15,14 +15,25 @@ struct ScanReviewView: View {
         NavigationStack {
             List {
                 if let current {
-                    SwiftUI.Section {
+                    SwiftUI.Section("") {
                         LabeledContent("Student", value: studentID.isEmpty ? "Needs review" : studentID)
-                        LabeledContent("Score", value: "\(current.score, specifier: "%.1f") / \(current.maximumScore, specifier: "%.1f")")
-                        LabeledContent("Percentage", value: "\(current.percentage, specifier: "%.1f")%")
+                        
+                        LabeledContent(
+                            "Score",
+                            value: "\(current.score, specifier: "%.1f") / \(current.maximumScore, specifier: "%.1f")"
+                        )
+                        
+                        LabeledContent(
+                            "Percentage",
+                            value: "\(current.percentage, specifier: "%.1f")%"
+                        )
                         
                         if current.needsReview {
-                            Label("Some answers need manual review", systemImage: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.orange)
+                            Label(
+                                "Some answers need manual review",
+                                systemImage: "exclamationmark.triangle.fill"
+                            )
+                            .foregroundStyle(.orange)
                         }
                     }
 
@@ -34,8 +45,11 @@ struct ScanReviewView: View {
                             Label(s.name, systemImage: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
                         } else {
-                            Label("Unregistered student ID", systemImage: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.orange)
+                            Label(
+                                "Unregistered student ID",
+                                systemImage: "exclamationmark.triangle.fill"
+                            )
+                            .foregroundStyle(.orange)
                         }
                     }
 
@@ -46,9 +60,12 @@ struct ScanReviewView: View {
                                     Text("Q\(resp.questionNumber)")
                                         .frame(width: 42, alignment: .leading)
                                     
-                                    Text(resp.selectedChoices.map { $0.rawValue }
-                                        .joined(separator: " + ")
-                                        .ifEmpty("Empty"))
+                                    Text(
+                                        resp.selectedChoices
+                                            .map { $0.rawValue }
+                                            .joined(separator: " + ")
+                                            .ifEmpty("Empty")
+                                    )
                                     
                                     Spacer()
                                     
