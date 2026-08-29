@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ScanReviewView: View {
     @EnvironmentObject private var store: SmartGradeStore
+    
     let omr: OMRProcessingResult
     let exam: Exam
     let onSave: (ExamResult) -> Void
@@ -14,54 +15,65 @@ struct ScanReviewView: View {
     var body: some View {
         NavigationStack {
             List {
-                if let current {
-                    SwiftUI.Section("") {
-                        LabeledContent("Student", value: studentID.isEmpty ? "Needs review" : studentID)
+                if let result = current {
+                    
+                    Section {
+                        LabeledContent("Student") {
+                            Text(studentID.isEmpty ? "Needs review" : studentID)
+                        }
                         
-                        LabeledContent(
-                            "Score",
-                            value: "\(current.score, specifier: "%.1f") / \(current.maximumScore, specifier: "%.1f")"
-                        )
+                        LabeledContent("Score") {
+                            Text(
+                                "\(result.score, specifier: "%.1f") / \(result.maximumScore, specifier: "%.1f")"
+                            )
+                        }
                         
-                        LabeledContent(
-                            "Percentage",
-                            value: "\(current.percentage, specifier: "%.1f")%"
-                        )
+                        LabeledContent("Percentage") {
+                            Text(
+                                "\(result.percentage, specifier: "%.1f")%"
+                            )
+                        }
                         
-                        if current.needsReview {
+                        if result.needsReview {
                             Label(
                                 "Some answers need manual review",
                                 systemImage: "exclamationmark.triangle.fill"
                             )
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.orange)
                         }
                     }
 
-                    SwiftUI.Section("Student") {
+                    Section("Student") {
                         TextField("Student ID", text: $studentID)
                             .keyboardType(.numberPad)
                         
-                        if let s = store.findStudent(studentID: studentID) {
-                            Label(s.name, systemImage: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
+                        if let student = store.findStudent(studentID: studentID) {
+                            Label(
+                                student.name,
+                                systemImage: "checkmark.circle.fill"
+                            )
+                            .foregroundStyle(Color.green)
                         } else {
                             Label(
                                 "Unregistered student ID",
                                 systemImage: "exclamationmark.triangle.fill"
                             )
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.orange)
                         }
                     }
 
-                    SwiftUI.Section("Questions") {
-                        ForEach(responses) { resp in
+                    Section("Questions") {
+                        ForEach(responses) { response in
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
-                                    Text("Q\(resp.questionNumber)")
-                                        .frame(width: 42, alignment: .leading)
+                                    Text("Q\(response.questionNumber)")
+                                        .frame(
+                                            width: 42,
+                                            alignment: .leading
+                                        )
                                     
                                     Text(
-                                        resp.selectedChoices
+                                        response.selectedChoices
                                             .map { $0.rawValue }
                                             .joined(separator: " + ")
                                             .ifEmpty("Empty")
@@ -69,51 +81,69 @@ struct ScanReviewView: View {
                                     
                                     Spacer()
                                     
-                                    StatusPill(status: resp.status)
+                                    StatusPill(status: response.status)
                                     
-                                    Text("\(resp.confidence, specifier: "%.0f")%")
-                                        .font(.caption.monospacedDigit())
+                                    Text(
+                                        "\(response.confidence, specifier: "%.0f")%"
+                                    )
+                                    .font(.caption.monospacedDigit())
                                 }
                                 
                                 HStack {
-                                    ForEach(AnswerChoice.allCases) { ch in
-                                        Button(ch.rawValue) {
-                                            toggle(resp.questionNumber, ch)
+                                    ForEach(AnswerChoice.allCases) { choice in
+                                        Button(choice.rawValue) {
+                                            toggle(
+                                                response.questionNumber,
+                                                choice
+                                            )
                                         }
                                         .font(.caption.bold())
-                                        .frame(width: 32, height: 32)
+                                        .frame(
+                                            width: 32,
+                                            height: 32
+                                        )
                                         .background(
-                                            resp.selectedChoices.contains(ch)
-                                            ? Color.accentColor
-                                            : Color.gray.opacity(0.12),
+                                            response.selectedChoices.contains(choice)
+                                                ? Color.accentColor
+                                                : Color.gray.opacity(0.12),
                                             in: Circle()
                                         )
                                         .foregroundStyle(
-                                            resp.selectedChoices.contains(ch)
-                                            ? .white
-                                            : .primary
+                                            response.selectedChoices.contains(choice)
+                                                ? Color.white
+                                                : Color.primary
                                         )
                                     }
                                 }
                                 
-                                Text("Correct: \(resp.correctChoice.rawValue)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                Text(
+                                    "Correct: \(response.correctChoice.rawValue)"
+                                )
+                                .font(.caption)
+                                .foregroundStyle(Color.secondary)
                             }
                             .padding(.vertical, 4)
                         }
                     }
                 }
             }
-            .navigationTitle(store.isArabic ? "مراجعة المسح" : "Review Scan")
+            .navigationTitle(
+                store.isArabic
+                    ? "مراجعة المسح"
+                    : "Review Scan"
+            )
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
+                ToolbarItem(
+                    placement: .cancellationAction
+                ) {
                     Button("Discard") {
                         onDiscard()
                     }
                 }
                 
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem(
+                    placement: .confirmationAction
+                ) {
                     Button("Save Result") {
                         save()
                     }
@@ -126,8 +156,11 @@ struct ScanReviewView: View {
         }
     }
 
-    func buildInitial() {
-        let student = store.findStudent(studentID: omr.studentID)
+    private func buildInitial() {
+        let student = store.findStudent(
+            studentID: omr.studentID
+        )
+        
         studentID = omr.studentID
         
         let result = GradingService.grade(
@@ -135,7 +168,9 @@ struct ScanReviewView: View {
             exam: exam,
             matchedStudent: student,
             classroomName: student.flatMap {
-                store.classroomName(for: $0.classroomId)
+                store.classroomName(
+                    for: $0.classroomId
+                )
             }
         )
         
@@ -143,45 +178,60 @@ struct ScanReviewView: View {
         responses = result.responses
     }
 
-    func toggle(_ q: Int, _ choice: AnswerChoice) {
-        responses = responses.map { r in
-            var x = r
+    private func toggle(
+        _ questionNumber: Int,
+        _ choice: AnswerChoice
+    ) {
+        responses = responses.map { response in
+            var updatedResponse = response
             
-            if x.questionNumber == q {
-                x.selectedChoices = x.selectedChoices.contains(choice)
-                    ? []
-                    : [choice]
+            if updatedResponse.questionNumber == questionNumber {
                 
-                x.status = x.selectedChoices.isEmpty
+                if updatedResponse.selectedChoices.contains(choice) {
+                    updatedResponse.selectedChoices = []
+                } else {
+                    updatedResponse.selectedChoices = [choice]
+                }
+                
+                updatedResponse.status =
+                    updatedResponse.selectedChoices.isEmpty
                     ? .empty
                     : .selected
                 
-                x.confidence = 100
-                x.manuallyEdited = true
+                updatedResponse.confidence = 100
+                updatedResponse.manuallyEdited = true
             }
             
-            return x
+            return updatedResponse
         }
         
-        if let c = current {
+        if let result = current {
             current = GradingService.recalculate(
-                c,
+                result,
                 exam: exam,
                 updatedResponses: responses
             )
         }
     }
 
-    func save() {
-        guard var result = current else { return }
+    private func save() {
+        guard var result = current else {
+            return
+        }
         
-        let student = store.findStudent(studentID: studentID)
+        let student = store.findStudent(
+            studentID: studentID
+        )
         
         result.studentID = studentID
         result.studentId = student?.id
-        result.studentName = student?.name ?? result.studentName
+        result.studentName =
+            student?.name ?? result.studentName
+        
         result.classroomName = student.flatMap {
-            store.classroomName(for: $0.classroomId)
+            store.classroomName(
+                for: $0.classroomId
+            )
         }
         
         onSave(result)
