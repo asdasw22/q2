@@ -6,7 +6,6 @@
 	objects = {
 		000000000000000000000011 /* SmartGradeScannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000010 /* SmartGradeScannerApp.swift */; };
 		000000000000000000000013 /* OMRModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000012 /* OMRModels.swift */; };
-		000000000000000000000015 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000014 /* CameraController.swift */; };
 		000000000000000000000017 /* DefaultTemplateFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000016 /* DefaultTemplateFactory.swift */; };
 		000000000000000000000019 /* ExportServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000018 /* ExportServices.swift */; };
 		00000000000000000000001B /* GradingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000001A /* GradingService.swift */; };
@@ -23,11 +22,11 @@
 		000000000000000000000031 /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000030 /* ScannerView.swift */; };
 		000000000000000000000033 /* StudentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000032 /* StudentsView.swift */; };
 		000000000000000000000035 /* TemplatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000034 /* TemplatesView.swift */; };
+		000000000000000000000037 /* DocumentScannerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000036 /* DocumentScannerService.swift */; };
 		000000000000000000000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000008 /* Assets.xcassets */; };
 		000000000000000000000007 /* SmartGradeScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartGradeScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000000000000000000010 /* SmartGradeScannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/App/SmartGradeScannerApp.swift"; sourceTree = "<group>"; };
 		000000000000000000000012 /* OMRModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Models/OMRModels.swift"; sourceTree = "<group>"; };
-		000000000000000000000014 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Services/CameraController.swift"; sourceTree = "<group>"; };
 		000000000000000000000016 /* DefaultTemplateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Services/DefaultTemplateFactory.swift"; sourceTree = "<group>"; };
 		000000000000000000000018 /* ExportServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Services/ExportServices.swift"; sourceTree = "<group>"; };
 		00000000000000000000001A /* GradingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Services/GradingService.swift"; sourceTree = "<group>"; };
@@ -44,11 +43,11 @@
 		000000000000000000000030 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Views/ScannerView.swift"; sourceTree = "<group>"; };
 		000000000000000000000032 /* StudentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Views/StudentsView.swift"; sourceTree = "<group>"; };
 		000000000000000000000034 /* TemplatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Views/TemplatesView.swift"; sourceTree = "<group>"; };
+		000000000000000000000036 /* DocumentScannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartGradeScanner/Services/DocumentScannerService.swift"; sourceTree = "<group>"; };
 		000000000000000000000008 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "SmartGradeScanner/Resources/Assets.xcassets"; sourceTree = "<group>"; };
 		000000000000000000000001 = {isa = PBXGroup; children = (
 				000000000000000000000010 /* SmartGradeScannerApp.swift */,
 				000000000000000000000012 /* OMRModels.swift */,
-				000000000000000000000014 /* CameraController.swift */,
 				000000000000000000000016 /* DefaultTemplateFactory.swift */,
 				000000000000000000000018 /* ExportServices.swift */,
 				00000000000000000000001A /* GradingService.swift */,
@@ -65,6 +64,7 @@
 				000000000000000000000030 /* ScannerView.swift */,
 				000000000000000000000032 /* StudentsView.swift */,
 				000000000000000000000034 /* TemplatesView.swift */,
+				000000000000000000000036 /* DocumentScannerService.swift */,
 				000000000000000000000008 /* Assets.xcassets */,
 				000000000000000000000002 /* Products */,
 			); sourceTree = "<group>"; };
@@ -74,7 +74,6 @@
 		000000000000000000000005 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
 				000000000000000000000011 /* SmartGradeScannerApp.swift in Sources */,
 				000000000000000000000013 /* OMRModels.swift in Sources */,
-				000000000000000000000015 /* CameraController.swift in Sources */,
 				000000000000000000000017 /* DefaultTemplateFactory.swift in Sources */,
 				000000000000000000000019 /* ExportServices.swift in Sources */,
 				00000000000000000000001B /* GradingService.swift in Sources */,
@@ -91,6 +90,7 @@
 				000000000000000000000031 /* ScannerView.swift in Sources */,
 				000000000000000000000033 /* StudentsView.swift in Sources */,
 				000000000000000000000035 /* TemplatesView.swift in Sources */,
+				000000000000000000000037 /* DocumentScannerService.swift in Sources */,
 			); runOnlyForDeploymentPostprocessing = 0; };
 		000000000000000000000006 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
 				000000000000000000000009 /* Assets.xcassets in Resources */,

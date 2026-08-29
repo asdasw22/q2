@@ -1,4 +1,4 @@
-import SwiftUI
+﻿import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject private var store: SmartGradeStore
@@ -55,23 +55,23 @@ struct RootView: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Palette.cyan,
+                                Palette.goldLight,
                                 Palette.indigo,
-                                Palette.violet
+                                Palette.goldDark
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .shadow(
-                        color: Palette.cyan.opacity(0.35),
+                        color: Palette.gold.opacity(0.24),
                         radius: 18,
                         y: 8
                     )
 
                 Image(systemName: "checkmark.seal.fill")
                     .font(.title2.weight(.black))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Palette.black)
             }
             .frame(width: 52, height: 52)
 
@@ -81,14 +81,14 @@ struct RootView: View {
                         .system(
                             size: 24,
                             weight: .black,
-                            design: .rounded
+                            design: .serif
                         )
                     )
                     .foregroundStyle(
                         LinearGradient(
                             colors: [
-                                .white,
-                                Palette.cyan.opacity(0.88)
+                                Palette.goldLight,
+                                Palette.gold
                             ],
                             startPoint: .leading,
                             endPoint: .trailing
@@ -97,8 +97,8 @@ struct RootView: View {
 
                 Text(
                     store.isArabic
-                    ? "ماسح OMR ذكي • تصحيح فوري • تحليلات متقدمة"
-                    : "AI-like OMR • Instant grading • Advanced analytics"
+                    ? "Ù…Ø§Ø³Ø­ OMR Ø°ÙƒÙŠ â€¢ ØªØµØ­ÙŠØ­ ÙÙˆØ±ÙŠ â€¢ ØªØ­Ù„ÙŠÙ„Ø§Øª Ù…ØªÙ‚Ø¯Ù…Ø©"
+                    : "Classic OMR â€¢ Instant grading â€¢ Golden dashboard"
                 )
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(Palette.muted)
@@ -147,7 +147,7 @@ struct RootView: View {
             }
         }
         .padding(10)
-        .background(.ultraThinMaterial)
+        .background(LinearGradient(colors: [Palette.black2.opacity(0.96), Palette.obsidian.opacity(0.98)], startPoint: .top, endPoint: .bottom))
         .overlay(
             Rectangle()
                 .frame(height: 1)
@@ -181,14 +181,14 @@ struct RootView: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 9)
             .foregroundStyle(
-                isSelected ? Color.white : Palette.muted
+                isSelected ? Palette.black : Palette.muted
             )
             .background {
                 if isSelected {
                     LinearGradient(
                         colors: [
-                            Palette.indigo,
-                            Palette.violet
+                            Palette.goldLight,
+                            Palette.gold
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -208,14 +208,14 @@ struct RootView: View {
                 )
                 .stroke(
                     isSelected
-                    ? Color.white.opacity(0.22)
+                    ? Palette.goldLight.opacity(0.35)
                     : Color.clear,
                     lineWidth: 1
                 )
             }
             .shadow(
                 color: isSelected
-                ? Palette.indigo.opacity(0.35)
+                ? Palette.gold.opacity(0.24)
                 : Color.clear,
                 radius: 14,
                 y: 8
@@ -224,3 +224,4 @@ struct RootView: View {
         .buttonStyle(.plain)
     }
 }
+
